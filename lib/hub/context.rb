@@ -263,6 +263,10 @@ module Hub
       def api_create_pullrequest_url(type)
         api_url(type, 'pulls', "#{owner}/#{name}")
       end
+
+      def api_issues_url(type)
+        api_url(type, 'issues', "list/#{owner}/#{name}/open")
+      end
     end
 
     class GithubURL < URI::HTTPS

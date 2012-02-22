@@ -560,6 +560,23 @@ module Hub
       end
     end
 
+    def issues(args)
+      unless project = local_repo.main_project
+        abort "Error: repository under 'origin' remote is not a GitHub project"
+      end
+      load_net_http
+      response = http_request(project.api_issues_url('json'))
+      issues = JSON.parse(response.body)['issues']
+      issues.each do |issue|
+        print "--------------------------------------------------------------\n"
+        printf "#%-03s %s\n", issue['number'], issue['title']
+        printf "     by %s created at %s\n", issue['user'], issue['created_at']
+        printf "     %s\n", issue['html_url']
+      end
+      args.shift
+      args.executable = 'echo'
+    end
+
     # $ hub compare 1.0..fix
     # > open https://github.com/CURRENT_REPO/compare/1.0...fix
     # $ hub compare refactor
